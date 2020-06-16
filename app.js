@@ -45,6 +45,9 @@ function randomColors() {
     const saturation = sliders[2];
     colorizeSliders(color, hue, brightness, saturation);
   });
+
+  // Reset Inputs
+  resetInputs();
 }
 
 function checkTextColor(color, textEl) {
@@ -90,6 +93,8 @@ function hslControls(e) {
     .set('hsl.h', hue.value);
 
   colorDivs[index].style.backgroundColor = color;
+
+  colorizeSliders(color, hue, brightness, saturation);
 }
 
 function updateTextUI(index) {
@@ -101,6 +106,25 @@ function updateTextUI(index) {
 
   const icons = activeDiv.querySelectorAll('.controls button');
   icons.forEach((icon) => checkTextColor(color, icon));
+}
+
+function resetInputs() {
+  sliders.forEach((slider) => {
+    if (slider.name === 'hue') {
+      const color = initialColors[slider.dataset.hue];
+      const hueValue = chroma(color).hsl()[0];
+      slider.value = Math.floor(hueValue);
+    } else if (slider.name === 'saturation') {
+      const color = initialColors[slider.dataset.sat];
+      const satValue = chroma(color).hsl()[1];
+      slider.value = Math.floor(satValue * 100) / 100;
+    } else if (slider.name === 'brightness') {
+      const color = initialColors[slider.dataset.bright];
+      const brightValue = chroma(color).hsl()[2];
+      slider.value = Math.floor(brightValue * 100) / 100;
+    } else {
+    }
+  });
 }
 
 randomColors();
