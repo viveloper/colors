@@ -2,6 +2,9 @@ const colorDivs = document.querySelectorAll('.color');
 const generateBtn = document.querySelector('.generate');
 const sliders = document.querySelectorAll('input[type="range"]');
 const currentHexs = document.querySelectorAll('.color h2');
+const adjustButtons = document.querySelectorAll('.adjust');
+const closeAdjustments = document.querySelectorAll('.close-adjustment');
+const sliderContainers = document.querySelectorAll('.sliders');
 
 let initialColors;
 
@@ -12,6 +15,21 @@ sliders.forEach((slider) => {
 colorDivs.forEach((div, index) => {
   div.addEventListener('change', () => {
     updateTextUI(index);
+  });
+});
+currentHexs.forEach((hex) => {
+  hex.addEventListener('click', () => {
+    copyToClipboard(hex);
+  });
+});
+adjustButtons.forEach((button, index) => {
+  button.addEventListener('click', () => {
+    openAdjustmentPanel(index);
+  });
+});
+closeAdjustments.forEach((button, index) => {
+  button.addEventListener('click', () => {
+    closeAdjustmentPanel(index);
   });
 });
 
@@ -125,6 +143,34 @@ function resetInputs() {
     } else {
     }
   });
+}
+
+function copyToClipboard(hex) {
+  const el = document.createElement('textarea');
+  el.value = hex.innerText;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+  // Popup Animation
+  const popup = document.querySelector('.copy-container');
+  const popupBox = popup.children[0];
+
+  popup.addEventListener('transitionend', () => {
+    popup.classList.remove('active');
+    popupBox.classList.remove('active');
+  });
+
+  popup.classList.add('active');
+  popupBox.classList.add('active');
+}
+
+function openAdjustmentPanel(index) {
+  sliderContainers[index].classList.toggle('active');
+}
+function closeAdjustmentPanel(index) {
+  sliderContainers[index].classList.remove('active');
 }
 
 randomColors();
